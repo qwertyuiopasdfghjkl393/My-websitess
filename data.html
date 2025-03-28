@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Subscription | FastConnect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #3f37c9;
+            --text: #2b2d42;
+            --text-light: #8d99ae;
+            --background: #f8f9fa;
+            --card-bg: #ffffff;
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --dark-text: #e1e1e1;
+            --success: #4cc9f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 480px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            width: 100%;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+        }
+        
+        .subtitle {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+        
+        .select-wrapper, .input-wrapper {
+            position: relative;
+        }
+        
+        .select-wrapper::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            pointer-events: none;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            appearance: none;
+            background-color: white;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .price-display {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        
+        .price-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .price-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .toggle-btn:hover {
+            color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        .network-icons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        
+        .network-option {
+            flex: 1;
+            text-align: center;
+            padding: 0.8rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .network-option i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+        
+        .network-option span {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .network-option.active {
+            border-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .network-option.active i {
+            color: var(--primary);
+        }
+        
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+        
+        .dark-mode .card {
+            background-color: var(--dark-card);
+        }
+        
+        .dark-mode label {
+            color: var(--dark-text);
+        }
+        
+        .dark-mode select, 
+        .dark-mode input {
+            background-color: #2a2a2a;
+            border-color: #3a3a3a;
+            color: var(--dark-text);
+        }
+        
+        .dark-mode .price-display {
+            background-color: #2a2a2a;
+        }
+        
+        .dark-mode .price-label {
+            color: #a1a1a1;
+        }
+        
+        .dark-mode .subtitle {
+            color: #a1a1a1;
+        }
+        
+        .dark-mode .network-option i {
+            color: #555;
+        }
+        
+        .dark-mode .network-option.active i {
+            color: var(--primary);
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="logo">
+                    <i class="fas fa-bolt"></i>
+                    <span>FastConnect</span>
+                </div>
+                <p class="subtitle">Instant data bundles for all networks</p>
+            </div>
+            
+            <form id="dataForm">
+                <div class="form-group">
+                    <label>Select Network</label>
+                    <div class="network-icons">
+                        <div class="network-option active" data-network="MTN" onclick="selectNetwork(this)">
+                            <i class="fas fa-sim-card"></i>
+                            <span>MTN</span>
+                        </div>
+                        <div class="network-option" data-network="Glo" onclick="selectNetwork(this)">
+                            <i class="fas fa-sim-card"></i>
+                            <span>Glo</span>
+                        </div>
+                        <div class="network-option" data-network="Airtel" onclick="selectNetwork(this)">
+                            <i class="fas fa-sim-card"></i>
+                            <span>Airtel</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="network" value="MTN">
+                </div>
+                
+                <div class="form-group">
+                    <label for="plan">Choose Data Plan</label>
+                    <div class="select-wrapper">
+                        <select id="plan" onchange="updatePrice()">
+                            <option value="120">1GB (3 Days) - ₦120</option>
+                            <option value="500">5GB (3 Weeks) - ₦500</option>
+                            <option value="1000">10GB (2 Months) - ₦1000</option>
+                            <option value="2000">20GB (6 Months) - ₦2000</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="price-display">
+                    <div class="price-amount" id="priceDisplay">₦120</div>
+                    <div class="price-label">Total Amount</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <div class="input-wrapper">
+                        <input type="tel" id="phone" placeholder="+234" required>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-primary" onclick="proceedToPayment()">
+                    <i class="fas fa-paper-plane"></i> Proceed to Payment
+                </button>
+            </form>
+            
+            <button class="toggle-btn" onclick="toggleDarkMode()">
+                <i class="fas fa-moon"></i> Dark Mode
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize with first network selected
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePrice();
+        });
+        
+        function selectNetwork(element) {
+            // Remove active class from all options
+            document.querySelectorAll('.network-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            
+            // Add active class to clicked option
+            element.classList.add('active');
+            
+            // Update hidden input value
+            document.getElementById('network').value = element.dataset.network;
+        }
+        
+        function updatePrice() {
+            let plan = document.getElementById("plan");
+            let priceDisplay = document.getElementById("priceDisplay");
+            priceDisplay.innerText = "₦" + plan.value;
+        }
+        
+        function proceedToPayment() {
+            let phone = document.getElementById("phone").value;
+
+            if (!phone) {
+                alert("Please enter your phone number.");
+                return;
+            }
+
+            if (!/^[0-9]{11}$/.test(phone)) {
+                alert("Please enter a valid 11-digit phone number.");
+                return;
+            }
+
+            // Redirect to payment page
+            window.location.href = "payment.html";
+        }
+        
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            const icon = document.querySelector('.toggle-btn i');
+            if (document.body.classList.contains("dark-mode")) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                document.querySelector('.toggle-btn span').textContent = 'Light Mode';
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                document.querySelector('.toggle-btn span').textContent = 'Dark Mode';
+            }
+        }
+    </script>
+</body>
+</html>

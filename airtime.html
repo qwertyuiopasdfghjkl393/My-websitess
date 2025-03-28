@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airtime Purchase</title>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-hover: #3a56d4;
+            --secondary-color: #3f37c9;
+            --text-color: #2b2d42;
+            --bg-color: #f8f9fa;
+            --card-color: #ffffff;
+            --border-color: #e9ecef;
+            --dark-text: #f8f9fa;
+            --dark-bg: #212529;
+            --dark-card: #343a40;
+            --dark-border: #495057;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background-color: var(--card-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .dark-mode .container {
+            background-color: var(--dark-card);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: inherit;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+            background-color: var(--card-color);
+            color: inherit;
+        }
+        
+        .dark-mode input, 
+        .dark-mode select {
+            border-color: var(--dark-border);
+            background-color: var(--dark-card);
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        .dark-mode .btn-secondary {
+            color: var(--dark-text);
+            border-color: var(--dark-text);
+        }
+        
+        .dark-mode .btn-secondary:hover {
+            background-color: rgba(248, 249, 250, 0.1);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .payment-summary {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        
+        .dark-mode .payment-summary {
+            background-color: rgba(67, 97, 238, 0.2);
+        }
+        
+        .payment-summary p {
+            margin-bottom: 8px;
+        }
+        
+        .payment-summary .amount {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+        
+        .dark-mode .theme-toggle {
+            color: var(--dark-text);
+        }
+        
+        .network-icons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .network-option {
+            text-align: center;
+            padding: 15px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            margin: 0 5px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .network-option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        .dark-mode .network-option {
+            border-color: var(--dark-border);
+        }
+        
+        .dark-mode .network-option.selected {
+            background-color: rgba(67, 97, 238, 0.2);
+        }
+        
+        .network-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .mtn { color: #ffcc00; }
+        .glo { color: #008000; }
+        .airtel { color: #ff0000; }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .network-option {
+                padding: 10px 5px;
+            }
+            
+            .network-icon {
+                font-size: 20px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <button class="theme-toggle" id="toggleTheme">🌓</button>
+    
+    <div class="container" id="formSection">
+        <h2>Buy Airtime</h2>
+        
+        <div class="network-icons">
+            <div class="network-option selected" data-network="MTN">
+                <span class="network-icon mtn"><i class="fas fa-sim-card"></i></span>
+                <div>MTN</div>
+            </div>
+            <div class="network-option" data-network="Glo">
+                <span class="network-icon glo"><i class="fas fa-wifi"></i></span>
+                <div>Glo</div>
+            </div>
+            <div class="network-option" data-network="Airtel">
+                <span class="network-icon airtel"><i class="fas fa-bolt"></i></span>
+                <div>Airtel</div>
+            </div>
+        </div>
+        
+        <input type="hidden" id="network" value="MTN">
+        
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="+234" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="amount">Amount (₦)</label>
+            <input type="number" id="amount" placeholder="" min="50" required>
+        </div>
+        
+        <button class="btn" onclick="proceedToPayment()">Continue</button>
+    </div>
+
+    <div class="container hidden" id="paymentSection">
+        <h2>Confirm Payment</h2>
+        
+        <div class="payment-summary">
+            <p>You are buying airtime for:</p>
+            <div class="amount" id="amountDisplay">₦0</div>
+            <p id="networkDisplay">Network: MTN</p>
+            <p id="phoneDisplay">Phone: 08012345678</p>
+        </div>
+        
+        <button class="btn" onclick="processPayment()">Pay Now</button>
+        <button class="btn btn-secondary" onclick="goBack()">Back</button>
+    </div>
+
+    <script>
+        // Network selection
+        const networkOptions = document.querySelectorAll('.network-option');
+        const networkInput = document.getElementById('network');
+        
+        networkOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                networkOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                networkInput.value = option.dataset.network;
+            });
+        });
+        
+        function proceedToPayment() {
+            const phone = document.getElementById('phone').value;
+            const amount = document.getElementById('amount').value;
+            const network = document.getElementById('network').value;
+            
+            if (!phone || !amount) {
+                alert("Please fill in all fields");
+                return;
+            }
+            
+            if (phone.length < 11) {
+                alert("Please enter a valid phone number");
+                return;
+            }
+            
+            if (amount < 50) {
+                alert("Minimum amount is ₦250");
+                return;
+            }
+            
+            // Update payment details
+            document.getElementById('amountDisplay').textContent = `₦${amount}`;
+            document.getElementById('networkDisplay').textContent = `Network: ${network}`;
+            document.getElementById('phoneDisplay').textContent = `Phone: ${phone}`;
+            
+            // Show payment section
+            document.getElementById('formSection').classList.add('hidden');
+            document.getElementById('paymentSection').classList.remove('hidden');
+        }
+        
+        function processPayment() {
+            const amount = document.getElementById('amount').value;
+            const phone = document.getElementById('phone').value;
+            const network = document.getElementById('network').value;
+            
+            // Store data in localStorage to use on payment page
+            localStorage.setItem('airtimeData', JSON.stringify({
+                amount: amount,
+                phone: phone,
+                network: network
+            }));
+            
+            // Redirect to payment page
+            window.location.href = "payment.html";
+        }
+        
+        function goBack() {
+            document.getElementById('paymentSection').classList.add('hidden');
+            document.getElementById('formSection').classList.remove('hidden');
+        }
+        
+        // Theme toggle
+        document.getElementById('toggleTheme').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>
